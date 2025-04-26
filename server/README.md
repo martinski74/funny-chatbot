@@ -1,9 +1,11 @@
-Project Setup
+## Project Setup
 
 ```sh
 npm install
+```
 
-Run the server
+## Run the server
 
 ```sh
 node index.js
+```
