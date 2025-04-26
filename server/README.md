@@ -1,2 +1,4 @@
-### Run server
-node index.js
+Project Setup
+
+```sh
+npm install
