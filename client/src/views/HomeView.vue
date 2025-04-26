@@ -53,7 +53,7 @@ function sendMessage() {
 // TODO ... Add scroll to bottom on new message.Stll not working
 watch(chatStore.messages, (newMess) => {
   if (newMess) {
-    messageBody.value.scrollIntoView({ block: 'end', behavior: 'smooth' });
+    messageBody.value.scrollTop = messageBody.value.scrollHeight;
   }
 });
 </script>
