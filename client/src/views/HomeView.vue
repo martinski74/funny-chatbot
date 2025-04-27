@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="chatFooter">
-      <form @submit.prevent="sendMessage()">
+      <form @submit.prevent="sendMessage">
         <input
           v-model="messageContent"
           id="createMessage"
