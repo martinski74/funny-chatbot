@@ -35,14 +35,14 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, nextTick } from 'vue';
 import { useChatStore } from '../stores/chat';
 
 const chatStore = useChatStore();
 
 const messageContent = ref('');
 const messageBody = ref(null);
-//Sends the message on form submit
+
 function sendMessage() {
   if (messageContent.value == '') return;
   chatStore.createMessage(messageContent.value);
@@ -50,12 +50,17 @@ function sendMessage() {
   messageContent.value = '';
 }
 
-// TODO ... Add scroll to bottom on new message.Stll not working
-watch(chatStore.messages, (newMess) => {
-  if (newMess) {
-    messageBody.value.scrollTop = messageBody.value.scrollHeight;
-  }
-});
+watch(
+  chatStore.messages,
+  () => {
+    nextTick(() => {
+      if (messageBody.value) {
+        messageBody.value.scrollTop = messageBody.value.scrollHeight;
+      }
+    });
+  },
+  { deep: true, immediate: true }
+);
 </script>
 
 <style>
@@ -86,7 +91,6 @@ watch(chatStore.messages, (newMess) => {
   width: 100%;
 }
 .chatFooter form {
-  /* padding: 5px; */
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -95,12 +99,12 @@ watch(chatStore.messages, (newMess) => {
 }
 .chatBody {
   overflow-y: scroll;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
   height: 84%;
 }
 #createMessage {
   width: 80%;
-  /* padding: 10px;
-  border-radius: 5px; */
   appearance: none;
   border: none;
   outline: none;
