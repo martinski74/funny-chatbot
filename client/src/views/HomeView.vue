@@ -20,6 +20,14 @@
           </div>
         </div>
       </div>
+      <div v-if="chatStore.isLoading" class="messageRow bot">
+        <div class="message bot loading">
+          <p>...</p>
+        </div>
+      </div>
+      <div v-if="chatStore.error" class="error-message">
+        {{ chatStore.error }}
+      </div>
     </div>
     <div class="chatFooter">
       <form @submit.prevent="sendMessage">
@@ -27,8 +35,14 @@
           v-model="messageContent"
           id="createMessage"
           placeholder="Ask me..."
+          :disabled="chatStore.isLoading"
+          @keydown.enter="sendMessage"
         />
-        <input type="submit" value="Send" />
+        <input 
+          type="submit" 
+          value="Send" 
+          :disabled="chatStore.isLoading || !messageContent.trim()"
+        />
       </form>
     </div>
   </div>
@@ -44,7 +58,7 @@ const messageContent = ref('');
 const messageBody = ref(null);
 
 function sendMessage() {
-  if (messageContent.value == '') return;
+  if (!messageContent.value.trim() || chatStore.isLoading) return;
   chatStore.createMessage(messageContent.value);
   chatStore.getResponse(messageContent.value);
   messageContent.value = '';
@@ -143,6 +157,18 @@ input:not(#createMessage):hover {
   border-radius: 50px;
   text-align: center;
   margin: 10px;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .messageRow.user .message {
@@ -154,5 +180,29 @@ input:not(#createMessage):hover {
 .chatBody::-webkit-scrollbar {
   width: 0px;
   height: 100%;
+}
+
+.message.loading {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.error-message {
+  color: #ff4444;
+  text-align: center;
+  padding: 10px;
+  margin: 10px;
+  background-color: rgba(255, 68, 68, 0.1);
+  border-radius: 8px;
+}
+
+input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 </style>
