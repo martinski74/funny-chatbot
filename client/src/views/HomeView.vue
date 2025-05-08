@@ -1,6 +1,7 @@
 <template>
   <div class="page-container">
     <div class="background-animation"></div>
+    <div class="fan-background"></div>
     <div id="chatContainer">
       <div class="chatHeader">
         <h5>Chat Bot</h5>
@@ -87,9 +88,9 @@ watch(
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(45deg, #1a5f7a, #6dd5ed);
   position: relative;
   overflow: hidden;
+  background-color: #0a0a0a;
 }
 
 .background-animation {
@@ -103,6 +104,21 @@ watch(
   filter: blur(80px);
   opacity: 0.7;
   animation: gradientAnimation 8s ease infinite;
+}
+
+.fan-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/circuit-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.6;
+  z-index: 0;
+  pointer-events: none;
+  filter: contrast(1.1) brightness(1.1);
 }
 
 @keyframes gradientAnimation {
@@ -124,7 +140,7 @@ watch(
 }
 
 #chatContainer {
-  background-color: rgba(92, 98, 111, 0.85);
+  background-color: rgba(92, 98, 111, 0.75);
   height: 800px;
   width: 40%;
   margin: 0 auto;
@@ -132,9 +148,10 @@ watch(
   flex-direction: column;
   position: relative;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
   z-index: 1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .chatHeader {
@@ -145,6 +162,8 @@ watch(
   font-size: 22px;
   font-weight: 700;
   font-family: cursive;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 .chatHeader > h5 {
   margin: 15px;
@@ -181,16 +200,35 @@ watch(
   font-weight: 700;
 }
 input:not(#createMessage) {
-  background-color: green;
+  background-color: #4CAF50;
   border: 0;
-  border-radius: 5px;
+  border-radius: 8px;
   color: white;
-  padding: 12px;
+  padding: 12px 24px;
   margin-bottom: 10px;
   font-family: sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 input:not(#createMessage):hover {
-  opacity: 0.5;
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+input:not(#createMessage):active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+input:not(#createMessage):disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.7;
 }
 .messageRow {
   display: flex;
