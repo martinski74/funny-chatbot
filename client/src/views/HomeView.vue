@@ -1,49 +1,52 @@
 <template>
-  <div id="chatContainer">
-    <div class="chatHeader">
-      <h5>Chat Bot</h5>
-    </div>
-    <div class="chatBody" ref="messageBody">
-      <div
-        class="messages"
-        v-for="message in chatStore.messages"
-        :key="message.id"
-      >
-        <div v-if="message.id % 2 == 0" class="messageRow user">
-          <div class="message user">
-            <p>{{ message.message }}</p>
+  <div class="page-container">
+    <div class="background-animation"></div>
+    <div id="chatContainer">
+      <div class="chatHeader">
+        <h5>Chat Bot</h5>
+      </div>
+      <div class="chatBody" ref="messageBody">
+        <div
+          class="messages"
+          v-for="message in chatStore.messages"
+          :key="message.id"
+        >
+          <div v-if="message.id % 2 == 0" class="messageRow user">
+            <div class="message user">
+              <p>{{ message.message }}</p>
+            </div>
+          </div>
+          <div v-else class="messageRow bot">
+            <div class="message bot">
+              <p>{{ message.message }}</p>
+            </div>
           </div>
         </div>
-        <div v-else class="messageRow bot">
-          <div class="message bot">
-            <p>{{ message.message }}</p>
+        <div v-if="chatStore.isLoading" class="messageRow bot">
+          <div class="message bot loading">
+            <p>...</p>
           </div>
         </div>
-      </div>
-      <div v-if="chatStore.isLoading" class="messageRow bot">
-        <div class="message bot loading">
-          <p>...</p>
+        <div v-if="chatStore.error" class="error-message">
+          {{ chatStore.error }}
         </div>
       </div>
-      <div v-if="chatStore.error" class="error-message">
-        {{ chatStore.error }}
+      <div class="chatFooter">
+        <form @submit.prevent="sendMessage">
+          <input
+            v-model="messageContent"
+            id="createMessage"
+            placeholder="Ask me..."
+            :disabled="chatStore.isLoading"
+            @keydown.enter="sendMessage"
+          />
+          <input
+            type="submit"
+            value="Send"
+            :disabled="chatStore.isLoading || !messageContent.trim()"
+          />
+        </form>
       </div>
-    </div>
-    <div class="chatFooter">
-      <form @submit.prevent="sendMessage">
-        <input
-          v-model="messageContent"
-          id="createMessage"
-          placeholder="Ask me..."
-          :disabled="chatStore.isLoading"
-          @keydown.enter="sendMessage"
-        />
-        <input
-          type="submit"
-          value="Send"
-          :disabled="chatStore.isLoading || !messageContent.trim()"
-        />
-      </form>
     </div>
   </div>
 </template>
@@ -78,15 +81,62 @@ watch(
 </script>
 
 <style scoped>
+.page-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, #1a5f7a, #6dd5ed);
+  position: relative;
+  overflow: hidden;
+}
+
+.background-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, #1a5f7a, #6dd5ed, #2193b0, #4fc3f7);
+  background-size: 400% 400%;
+  filter: blur(80px);
+  opacity: 0.7;
+  animation: gradientAnimation 8s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 50% 0%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 #chatContainer {
-  background-color: #5c626f;
+  background-color: rgba(92, 98, 111, 0.85);
   height: 800px;
   width: 40%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   position: relative;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  z-index: 1;
 }
+
 .chatHeader {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   color: white;
@@ -116,6 +166,8 @@ watch(
   scroll-behavior: smooth;
   padding-bottom: 10px;
   height: 84%;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 #createMessage {
   width: 80%;
@@ -178,8 +230,7 @@ input:not(#createMessage):hover {
   background-color: #1982fc;
 }
 .chatBody::-webkit-scrollbar {
-  width: 0px;
-  height: 100%;
+  display: none;
 }
 
 .message.loading {
