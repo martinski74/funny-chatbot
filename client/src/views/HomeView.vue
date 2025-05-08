@@ -38,9 +38,9 @@
           :disabled="chatStore.isLoading"
           @keydown.enter="sendMessage"
         />
-        <input 
-          type="submit" 
-          value="Send" 
+        <input
+          type="submit"
+          value="Send"
           :disabled="chatStore.isLoading || !messageContent.trim()"
         />
       </form>
@@ -77,7 +77,7 @@ watch(
 );
 </script>
 
-<style>
+<style scoped>
 #chatContainer {
   background-color: #5c626f;
   height: 800px;
@@ -187,9 +187,15 @@ input:not(#createMessage):hover {
 }
 
 @keyframes pulse {
-  0% { opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { opacity: 0.6; }
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
 }
 
 .error-message {
