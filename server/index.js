@@ -5,7 +5,11 @@ const cleverbot = require('cleverbot-free');
 
 const PORT = process.env.PORT || 8080;
 
-app.use(cors());
+app.use(cors({ 
+  origin: ['http://localhost:5173', 'http://funny-chatbot.up.railway.app'],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

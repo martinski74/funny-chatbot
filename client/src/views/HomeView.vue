@@ -200,7 +200,7 @@ watch(
   font-weight: 700;
 }
 input:not(#createMessage) {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   border: 0;
   border-radius: 8px;
   color: white;
