@@ -38,8 +38,8 @@
             v-model="messageContent"
             id="createMessage"
             placeholder="Ask me..."
-            :disabled="chatStore.isLoading"
             @keydown.enter="sendMessage"
+            ref="inputRef"
           />
           <input
             type="submit"
@@ -60,12 +60,13 @@ const chatStore = useChatStore();
 
 const messageContent = ref('');
 const messageBody = ref(null);
-
+const inputRef = ref(null);
 function sendMessage() {
   if (!messageContent.value.trim() || chatStore.isLoading) return;
   chatStore.createMessage(messageContent.value);
   chatStore.getResponse(messageContent.value);
   messageContent.value = '';
+  inputRef.value && inputRef.value.focus();
 }
 
 watch(
